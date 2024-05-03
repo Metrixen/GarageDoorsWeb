@@ -41,7 +41,7 @@ namespace GarageDoorsWeb.Controllers
 
         // POST: api/Door
         [HttpPost]
-        public IActionResult AddDoor([FromBody] Door door)
+        public IActionResult AddDoor([FromForm] Door door)
         {
             if (door == null)
             {

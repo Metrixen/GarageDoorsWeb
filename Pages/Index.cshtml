@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model GarageDoorsWeb.Pages.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -7,8 +7,19 @@
 <div class="text-center">
     <h1 class="display-4">GarageDoors - The Smart Garage Solution</h1>
     <form method="post" action="/Status">
-        <button type="submit" name="status" value="LOCKED">LOCK</button>
-        <button type="submit" name="status" value="UNLOCKED">UNLOCK</button>
+        <button type="submit" class="btn btn-primary" name="status" value="LOCKED">LOCK</button>
+        <button type="submit" class="btn btn-primary" name="status" value="UNLOCKED">UNLOCK</button>
     </form>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <!-- Add Door button redirects to the AddDoor page -->
+    <form method="post" >
+        <div class="form-group">
+            <label for="doorName">Door Name:</label>
+            <input type="text" class="form-control" id="doorName" name="DoorName" asp-for="Door.DoorName">
+            <span asp-validation-for="Door.DoorName" class="text-danger"></span>
+        </div>
+        <!-- Add other input fields for door data (e.g., description, etc.) -->
+
+        <button type="submit" class="btn btn-primary">Add Door</button>
+    </form>
 </div>
