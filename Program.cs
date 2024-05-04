@@ -24,6 +24,13 @@ namespace GarageDoorsWeb
                 options.EnableSensitiveDataLogging();
             });
 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ILogService, LogService>();
+            builder.Services.AddScoped<IDoorService,DoorService>();
+
+            builder.Services.AddScoped<IDoorRepository, DoorRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ILogRepository, LogRepository>();
 
 
 
@@ -38,6 +45,7 @@ namespace GarageDoorsWeb
                 app.UseHsts();
             }
 
+            app.MapDefaultControllerRoute();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

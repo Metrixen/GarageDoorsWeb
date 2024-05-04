@@ -1,5 +1,5 @@
 ﻿@page
-@model GarageDoorsWeb.Pages.IndexModel
+@model GarageDoorsWeb.Models.Door
 @{
     ViewData["Title"] = "Home page";
 }
@@ -11,12 +11,12 @@
         <button type="submit" class="btn btn-primary" name="status" value="UNLOCKED">UNLOCK</button>
     </form>
 
-    <!-- Add Door button redirects to the AddDoor page -->
-    <form method="post" >
+
+    <form method="post" action="/api/Door">
         <div class="form-group">
             <label for="doorName">Door Name:</label>
-            <input type="text" class="form-control" id="doorName" name="DoorName" asp-for="Door.DoorName">
-            <span asp-validation-for="Door.DoorName" class="text-danger"></span>
+            <input type="text" class="form-control" id="doorName" name="DoorName" required>
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.DoorName)</span>
         </div>
         <!-- Add other input fields for door data (e.g., description, etc.) -->
 

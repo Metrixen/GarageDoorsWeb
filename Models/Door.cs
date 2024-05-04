@@ -18,6 +18,6 @@ namespace GarageDoorsWeb.Models
 
         // Foreign key for User (optional, depends on your specific requirements)
         public int? UserID { get; set; }
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }

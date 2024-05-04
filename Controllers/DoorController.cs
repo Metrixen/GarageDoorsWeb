@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GarageDoorsWeb.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/door")]
     [ApiController]
     public class DoorController : ControllerBase
     {
@@ -41,7 +41,7 @@ namespace GarageDoorsWeb.Controllers
 
         // POST: api/Door
         [HttpPost]
-        public IActionResult AddDoor([FromForm] Door door)
+        public IActionResult AddDoor([FromBody] Door door)
         {
             if (door == null)
             {
