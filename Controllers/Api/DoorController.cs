@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GarageDoorsWeb.Controllers
+namespace GarageDoorsWeb.Controllers.Api
 {
     [Route("api/door")]
     [ApiController]
@@ -98,17 +98,17 @@ namespace GarageDoorsWeb.Controllers
         }
 
         // PUT: api/Door/{id}/lock
-       /* [HttpPut("{id}/lock")]
-        public IActionResult LockOrUnlockDoor(int id, [FromQuery] int userId, [FromQuery] bool isLocked)
-        {
-            var door = _doorService.GetDoorById(id);
-            if (door == null)
-            {
-                return NotFound("Door not found.");
-            }
+        /* [HttpPut("{id}/lock")]
+         public IActionResult LockOrUnlockDoor(int id, [FromQuery] int userId, [FromQuery] bool isLocked)
+         {
+             var door = _doorService.GetDoorById(id);
+             if (door == null)
+             {
+                 return NotFound("Door not found.");
+             }
 
-            _doorService.LockOrUnlockDoor(id, userId, isLocked);
-            return NoContent();
-        }*/
+             _doorService.LockOrUnlockDoor(id, userId, isLocked);
+             return NoContent();
+         }*/
     }
 }

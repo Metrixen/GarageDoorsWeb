@@ -27,7 +27,12 @@ namespace GarageDoorsWeb.Services
         }
         public Door GetDoorById(int doorId)
         {
-            return _dbcontext.Doors.Find(doorId);
+            var door = _dbcontext.Doors.Find(doorId);
+            if (door == null)
+            {
+                throw new ArgumentException("Door not found.");
+            }
+            return door;
         }
         public void UpdateDoor(Door door)
         {

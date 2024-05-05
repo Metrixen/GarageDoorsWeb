@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GarageDoorsWeb.Controllers
+namespace GarageDoorsWeb.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]

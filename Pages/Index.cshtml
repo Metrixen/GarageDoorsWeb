@@ -1,25 +1,39 @@
 ﻿@page
-@model GarageDoorsWeb.Models.Door
+@model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">GarageDoors - The Smart Garage Solution</h1>
-    <form method="post" action="/Status">
-        <button type="submit" class="btn btn-primary" name="status" value="LOCKED">LOCK</button>
-        <button type="submit" class="btn btn-primary" name="status" value="UNLOCKED">UNLOCK</button>
-    </form>
+<h1>Welcome to My Garage Doors</h1>
 
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Door Name</th>
+            <th>Is Open</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var door in Model.Doors)
+        {
+            <tr>
+                <td>@door.DoorID</td>
+                <td>@door.DoorName</td>
+                <td>@door.IsOpen</td>
 
-    <form method="post" action="/api/Door">
-        <div class="form-group">
-            <label for="doorName">Door Name:</label>
-            <input type="text" class="form-control" id="doorName" name="DoorName" required>
-            <span class="text-danger">@Html.ValidationMessageFor(model => model.DoorName)</span>
-        </div>
-        <!-- Add other input fields for door data (e.g., description, etc.) -->
+                <td>
+                    <form method="post" asp-page-handler="Toggle" asp-route-id="@door.DoorID">
+                        <button type="submit">Change Status</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-        <button type="submit" class="btn btn-primary">Add Door</button>
-    </form>
-</div>
+<form method="post" asp-page-handler="AddDoor">
+    <label for="doorName">Door Name:</label>
+    <input type="text" id="doorName" name="DoorName">
+    <button type="submit">Add Door</button>
+</form>
