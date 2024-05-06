@@ -1,0 +1,47 @@
+﻿@page
+@model GarageDoorsWeb.Pages.AdminModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<h1>Welcome to the Admin Dashboard</h1>
+
+<!-- Add your Admin dashboard content here -->
+<table>
+    <thead>
+        <tr>
+            <th>Users</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Username</td>
+            </tr>
+        }
+        <tr>
+            <th>Create New User</th>
+        </tr>
+        <tr>
+            <td>
+                <form method="post" asp-page-handler="AddUser">
+                    <div>
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" asp-for="NewUser.Username" />
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" asp-for="NewUser.Password" />
+                    </div>
+                    <div>
+                        <label for="isAdmin">Is Admin:</label>
+                        <input type="checkbox" id="isAdmin" asp-for="NewUser.isAdmin" />
+                    </div>
+                    <div>
+                        <button type="submit">Create User</button>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>

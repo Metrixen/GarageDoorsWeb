@@ -23,7 +23,18 @@ namespace GarageDoorsWeb.Services
         }
         public IEnumerable<Door> GetAllDoors()
         {
-            return _dbcontext.Doors.ToList();
+            try
+            {
+                return _dbcontext.Doors.ToList();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (use your logging framework of choice)
+                Console.WriteLine(ex.Message); // Placeholder for actual logging
+
+                // Return an empty list on error to prevent null references elsewhere
+                return Enumerable.Empty<Door>();
+            }
         }
         public Door GetDoorById(int doorId)
         {

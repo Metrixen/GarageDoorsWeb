@@ -24,7 +24,7 @@ namespace GarageDoorsWeb.Pages
         public void OnGet()
         {
             // Populate the list of doors
-            Doors = _doorService.GetAllDoors();
+            Doors = _doorService.GetAllDoors() ?? Enumerable.Empty<Door>();
         }
 
         // Handler for adding a new door
@@ -32,22 +32,13 @@ namespace GarageDoorsWeb.Pages
         {
             if (!string.IsNullOrEmpty(DoorName))
             {
-                // Create a new door object
-                var newDoor = new Door
-                {
-                    DoorName = DoorName,
-                    // Set other properties of the door as needed
-                };
-
-                // Add the new door to the database
+                var newDoor = new Door { DoorName = DoorName };
                 _doorService.AddDoor(newDoor);
-
-                // Redirect back to the index page
                 return RedirectToPage("/Index");
             }
             else
             {
-                // Handle invalid input, such as displaying an error message
+                Doors = _doorService.GetAllDoors() ?? Enumerable.Empty<Door>(); // Initialize Doors
                 return Page();
             }
         }
@@ -55,21 +46,17 @@ namespace GarageDoorsWeb.Pages
         // Handler for toggling the status of a door
         public IActionResult OnPostToggleDoor(int doorId)
         {
-            var door = _doorService.GetDoorById(doorId);
-            if (door != null)
+            try
             {
-                // Door found, proceed with toggling logic
-                // For example:
-                door.IsOpen = !door.IsOpen; // Toggle the IsOpen status
-                _doorService.UpdateDoor(door); // Update the door in the database
-                return RedirectToPage("/Index"); // Redirect back to the index page
+                var door = _doorService.GetDoorById(doorId);
+                door.IsOpen = !door.IsOpen;
+                _doorService.UpdateDoor(door);
+                return RedirectToPage("/Index");
             }
-            else
+            catch (ArgumentException ex)
             {
-                // Handle case where door with specified ID was not found
-                // For example:
-                TempData["ErrorMessage"] = "Door not found."; // Store error message in TempData
-                return RedirectToPage("/Index"); // Redirect back to the index page
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToPage("/Index");
             }
         }
     }

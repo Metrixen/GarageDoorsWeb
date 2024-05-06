@@ -1,4 +1,5 @@
 ﻿@page
+@using GarageDoorsWeb.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Home Page";
@@ -23,7 +24,7 @@
                 <td>@door.IsOpen</td>
 
                 <td>
-                    <form method="post" asp-page-handler="Toggle" asp-route-id="@door.DoorID">
+                    <form method="post" asp-page-handler="ToggleDoor" asp-route-doorId="@door.DoorID">
                         <button type="submit">Change Status</button>
                     </form>
                 </td>

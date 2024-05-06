@@ -2,6 +2,7 @@
 using GarageDoorsWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GarageDoorsWeb.Controllers
 {
@@ -61,7 +62,7 @@ namespace GarageDoorsWeb.Controllers
             {
                 return NotFound();
             }
-
+            
             // Toggle the IsOpen property
             door.IsOpen = !door.IsOpen;
 
