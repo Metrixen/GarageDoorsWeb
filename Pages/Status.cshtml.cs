@@ -1,14 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
+using GarageDoorsWeb.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace GarageDoorsWeb.Pages
 {
     public class StatusModel : PageModel
     {
-        public string Status { get; set; }
-        public void OnPost(string status)
+        private readonly GarageDoorsContext _context;
+
+        public StatusModel(GarageDoorsContext context)
         {
-            Status = status;
+            _context = context;
+        }
+
+        public string Status { get; set; }
+        public List<Door> Doors { get; set; } // Changed from IEnumerable to List for simplicity
+
+        public async Task OnGetAsync()
+        {
+            Doors = await _context.Doors.ToListAsync();
         }
     }
 }
