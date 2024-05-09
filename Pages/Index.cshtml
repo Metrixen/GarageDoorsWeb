@@ -6,13 +6,13 @@
 }
 
 <h1>Welcome to My Garage Doors</h1>
-
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>ID</th>
             <th>Door Name</th>
             <th>Is Open</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -22,10 +22,9 @@
                 <td>@door.DoorID</td>
                 <td>@door.DoorName</td>
                 <td>@door.IsOpen</td>
-
                 <td>
                     <form method="post" asp-page-handler="ToggleDoor" asp-route-doorId="@door.DoorID">
-                        <button type="submit">Change Status</button>
+                        <button type="submit" class="btn btn-primary">Change Status</button>
                     </form>
                 </td>
             </tr>
@@ -33,8 +32,45 @@
     </tbody>
 </table>
 
-<form method="post" asp-page-handler="AddDoor">
-    <label for="doorName">Door Name:</label>
-    <input type="text" id="doorName" name="DoorName">
-    <button type="submit">Add Door</button>
+<form method="post" asp-page-handler="AddDoor" class="form-inline mt-4">
+    <label for="doorName" class="mr-2">Door Name:</label>
+    <input type="text" id="doorName" name="DoorName" class="form-control mr-2">
+    <button type="submit" class="btn btn-success">Add Door</button>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const forms = document.querySelectorAll('form');  // Get all forms on the page
+
+        forms.forEach(form => {
+            const button = form.querySelector('button[type="submit"]');  // Find the submit button in the form
+
+            // Check if the button should be disabled on page load
+            const disabledUntil = localStorage.getItem('disabledUntil');
+            if (disabledUntil && new Date().getTime() < disabledUntil) {
+                button.disabled = true;
+                const timeoutDuration = disabledUntil - new Date().getTime();
+                setTimeout(() => {
+                    button.disabled = false;
+                    localStorage.removeItem('disabledUntil'); // Clear after re-enabling
+                }, timeoutDuration);
+            }
+
+            // Add submit event listener to the form
+            form.addEventListener('submit', function (event) {
+                const disabledFor = 20000; // Disable time in milliseconds (20 seconds)
+                const currentTime = new Date().getTime();
+                const disableUntil = currentTime + disabledFor;
+                localStorage.setItem('disabledUntil', disableUntil);
+
+                // Optionally, immediately disable the button to prevent further clicks
+                button.disabled = true;
+                setTimeout(() => {
+                    button.disabled = false;  // This will only re-enable after reload
+                }, disabledFor);
+            });
+        });
+    });
+</script>
+
+
+
