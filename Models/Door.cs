@@ -16,8 +16,8 @@ namespace GarageDoorsWeb.Models
         public bool IsLocked { get; set; }
         public DateTime LastModified { get; set; }
 
-        // Foreign key for User (optional, depends on your specific requirements)
-        public int? UserID { get; set; }
-        public virtual User? User { get; set; }
+        public virtual ICollection<Logs> Logs { get; set; } = new HashSet<Logs>();
+        public virtual ICollection<UserDoor> UserDoors { get; set; } = new HashSet<UserDoor>();
+
     }
 }

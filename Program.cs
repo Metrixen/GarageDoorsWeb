@@ -27,7 +27,9 @@ namespace GarageDoorsWeb
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<IDoorService,DoorService>();
+            builder.Services.AddScoped<IUserDoorService, UserDoorService>();
 
+            builder.Services.AddScoped<IUserDoorRepository, UserDoorRepository>();
             builder.Services.AddScoped<IDoorRepository, DoorRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ILogRepository, LogRepository>();

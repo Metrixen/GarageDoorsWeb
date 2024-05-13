@@ -5,11 +5,13 @@
 }
 <h1>Welcome to the Admin Dashboard</h1>
 
-<!-- Add your Admin dashboard content here -->
-<table>
+<!-- Users Section -->
+<h2>Users</h2>
+<table class="table">
     <thead>
         <tr>
-            <th>Users</th>
+            <th>Username</th>
+            <th>User ID</th>
         </tr>
     </thead>
     <tbody>
@@ -17,62 +19,99 @@
         {
             <tr>
                 <td>@user.Username</td>
+                <td>@user.UserID</td>
             </tr>
         }
-        <tr>
-            <th>Create New User</th>
-        </tr>
-        <tr>
-            <td>
-                <form method="post" asp-page-handler="AddUser">
-                    <div>
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" asp-for="NewUser.Username" />
-                    </div>
-                    <div>
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" asp-for="NewUser.Password" />
-                    </div>
-                    <div>
-                        <label for="isAdmin">Is Admin:</label>
-                        <input type="checkbox" id="isAdmin" asp-for="NewUser.isAdmin" />
-                    </div>
-                    <div>
-                        <button type="submit">Create User</button>
-                    </div>
-                </form>
-            </td>
-        </tr>
-        <h2>Manage Doors</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Door Name</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var door in Model.Doors)
-                {
-                    <tr>
-                        <td>@door.DoorID</td>
-                        <td>
-                            <form method="post" asp-page-handler="RenameDoor" asp-route-id="@door.DoorID">
-                                <input type="text" name="newName" value="@door.DoorName" required />
-                                <button type="submit">Save</button>
-                            </form>
-                        </td>
-                        <td>@door.IsOpen</td>
-                        <td>
-                            <form method="post" asp-page-handler="RemoveDoor" asp-route-id="@door.DoorID">
-                                <button type="submit" onclick="return confirm('Are you sure you want to remove this door?');">Remove Door</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </tbody>
 </table>
+
+<!-- Add New User Form -->
+<h3>Create New User</h3>
+<form method="post" asp-page-handler="AddUser" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <label for="username" class="sr-only">Username:</label>
+        <input type="text" id="username" asp-for="NewUser.Username" class="form-control" placeholder="Username" />
+    </div>
+    <div class="form-group mr-2">
+        <label for="password" class="sr-only">Password:</label>
+        <input type="password" id="password" asp-for="NewUser.Password" class="form-control" placeholder="Password" />
+    </div>
+    <div class="form-check mr-2">
+        <input type="checkbox" id="isAdmin" asp-for="NewUser.isAdmin" class="form-check-input" />
+        <label for="isAdmin" class="form-check-label">Is Admin</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create User</button>
+</form>
+
+<!-- Doors Section -->
+<h2>Manage Doors</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Door Name</th>
+            <th>Door ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var door in Model.Doors)
+        {
+            <tr>
+                <td>@door.DoorName</td>
+                <td>@door.DoorID</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Add New Door Form -->
+<h3>Add New Door</h3>
+<form method="post" asp-page-handler="AddDoor" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <label for="doorName" class="sr-only">Door Name:</label>
+        <input type="text" id="doorName" name="DoorName" class="form-control" placeholder="Door Name">
+    </div>
+    <button type="submit" class="btn btn-success">Add Door</button>
+</form>
+
+<h2>Assigned Users-Doors</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>UserID</th>
+            <th>Door Name</th>
+            <th>DoorID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userdoor in Model.UserDoor)
+        {
+            <tr>
+                <td>@userdoor.User.Username</td>
+                <td>@userdoor.User.UserID</td>
+                <td>@userdoor.Door.DoorName</td>
+                <td>@userdoor.Door.DoorName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Assignment Section -->
+<h2>Assign or Unassign User to Door</h2>
+<form method="post">
+    <div class="form-group">
+        <label for="userSelect">Select User:</label>
+        <select id="userSelect" asp-for="SelectedUserId" asp-items="@(new SelectList(Model.Users, "UserID", "Username"))" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label for="doorSelect">Select Door:</label>
+        <select id="doorSelect" asp-for="SelectedDoorId" asp-items="@(new SelectList(Model.Doors, "DoorID", "DoorName"))" class="form-control"></select>
+    </div>
+    <button type="submit" asp-page-handler="AssignUserToDoor" class="btn btn-primary">Assign</button>
+    <button type="submit" asp-page-handler="UnassignUserFromDoor" class="btn btn-warning">Unassign</button>
+</form>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}

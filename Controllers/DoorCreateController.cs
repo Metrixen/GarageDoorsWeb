@@ -9,6 +9,7 @@ namespace GarageDoorsWeb.Controllers
     public class DoorCreateController : Controller
     {
         private readonly IDoorService _doorService;
+        private readonly IUserDoorService _userDoorService;
 
         public DoorCreateController(IDoorService doorService)
         {
@@ -106,6 +107,20 @@ namespace GarageDoorsWeb.Controllers
         {
             _doorService.DeleteDoor(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult AssignUserToDoor(int userId, int doorId)
+        {
+            try
+            {
+                _userDoorService.AddUserToDoor(userId, doorId);
+                return Ok("User assigned to door successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

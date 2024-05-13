@@ -20,5 +20,6 @@ namespace GarageDoorsWeb.Models
 
         // Navigation property to link Logs
         public virtual ICollection<Logs> Logs { get; set; } = new HashSet<Logs>();
+        public virtual ICollection<UserDoor> UserDoors { get; set; } = new HashSet<UserDoor>();
     }
 }

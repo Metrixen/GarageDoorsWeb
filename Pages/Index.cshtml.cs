@@ -27,21 +27,7 @@ namespace GarageDoorsWeb.Pages
             Doors = _doorService.GetAllDoors() ?? Enumerable.Empty<Door>();
         }
 
-        // Handler for adding a new door
-        public IActionResult OnPostAddDoor()
-        {
-            if (!string.IsNullOrEmpty(DoorName))
-            {
-                var newDoor = new Door { DoorName = DoorName };
-                _doorService.AddDoor(newDoor);
-                return RedirectToPage("/Index");
-            }
-            else
-            {
-                Doors = _doorService.GetAllDoors() ?? Enumerable.Empty<Door>(); // Initialize Doors
-                return Page();
-            }
-        }
+       
 
         // Handler for toggling the status of a door
         public IActionResult OnPostToggleDoor(int doorId)

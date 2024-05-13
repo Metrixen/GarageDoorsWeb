@@ -9,21 +9,34 @@ namespace GarageDoorsWeb.Pages
     {
         private readonly IUserService _userService;
         private readonly IDoorService _doorService;
+        private readonly IUserDoorService _userDoorService;
 
         [BindProperty]
         public User NewUser { get; set; }
         public IEnumerable<User> Users { get; set; }
+        // Property to hold the submitted door name
+        [BindProperty]
+        public string DoorName { get; set; }
         public List<Door> Doors { get; set; }
+        public List<UserDoor> UserDoor { get; set; }
 
-        public AdminModel(IUserService userService, IDoorService doorService)
+        [BindProperty]
+        public int SelectedUserId { get; set; }  // Bind these properties to dropdowns in the UI
+
+        [BindProperty]
+        public int SelectedDoorId { get; set; }
+
+        public AdminModel(IUserService userService, IDoorService doorService, IUserDoorService userDoorService)
         {
             _userService = userService;
             _doorService = doorService;
+            _userDoorService = userDoorService;
         }
         public void OnGet()
         {
             Users = _userService.GetAllUsers();
             Doors = _doorService.GetAllDoors().ToList();
+            UserDoor = _userDoorService.GetAllUserDoors().ToList();
         }
 
         [HttpPost]
@@ -50,6 +63,21 @@ namespace GarageDoorsWeb.Pages
             // Redirect to a different page or return a success message
             return RedirectToPage("/Admin");
         }
+        // Handler for adding a new door
+        public IActionResult OnPostAddDoor()
+        {
+            if (!string.IsNullOrEmpty(DoorName))
+            {
+                var newDoor = new Door { DoorName = DoorName };
+                _doorService.AddDoor(newDoor);
+                return RedirectToPage("/Index");
+            }
+            else
+            {
+                Doors = (List<Door>)(_doorService.GetAllDoors() ?? Enumerable.Empty<Door>()); // Initialize Doors
+                return Page();
+            }
+        }
         public IActionResult OnPostRenameDoor(int id, string newName)
         {
             if (!string.IsNullOrWhiteSpace(newName))
@@ -73,6 +101,38 @@ namespace GarageDoorsWeb.Pages
         {
             _doorService.DeleteDoor(id);
             return RedirectToPage();
+        }
+
+        [HttpPost]
+        public IActionResult OnPostAssignUserToDoor()
+        {
+            try
+            {
+                _userDoorService.AddUserToDoor(SelectedUserId, SelectedDoorId);
+                TempData["Message"] = "User successfully assigned to door.";
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error: {ex.Message}");
+                return Page();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult OnPostUnassignUserFromDoor()
+        {
+            try
+            {
+                _userDoorService.RemoveUserFromDoor(SelectedUserId, SelectedDoorId);
+                TempData["Message"] = "User successfully unassigned from door.";
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error: {ex.Message}");
+                return Page();
+            }
         }
     }
 }

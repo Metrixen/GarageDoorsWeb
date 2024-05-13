@@ -5,10 +5,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GarageDoorsWeb.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Doors",
+                columns: table => new
+                {
+                    DoorID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsOpen = table.Column<bool>(type: "bit", nullable: false),
+                    IsLocked = table.Column<bool>(type: "bit", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doors", x => x.DoorID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -24,28 +40,6 @@ namespace GarageDoorsWeb.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Doors",
-                columns: table => new
-                {
-                    DoorID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DoorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsOpen = table.Column<bool>(type: "bit", nullable: false),
-                    IsLocked = table.Column<bool>(type: "bit", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doors", x => x.DoorID);
-                    table.ForeignKey(
-                        name: "FK_Doors_Users_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -76,10 +70,29 @@ namespace GarageDoorsWeb.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Doors_UserID",
-                table: "Doors",
-                column: "UserID");
+            migrationBuilder.CreateTable(
+                name: "UserDoors",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    DoorID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDoors", x => new { x.UserID, x.DoorID });
+                    table.ForeignKey(
+                        name: "FK_UserDoors_Doors_DoorID",
+                        column: x => x.DoorID,
+                        principalTable: "Doors",
+                        principalColumn: "DoorID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserDoors_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Logs_DoorID",
@@ -90,12 +103,20 @@ namespace GarageDoorsWeb.Migrations
                 name: "IX_Logs_UserID",
                 table: "Logs",
                 column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserDoors_DoorID",
+                table: "UserDoors",
+                column: "DoorID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Logs");
+
+            migrationBuilder.DropTable(
+                name: "UserDoors");
 
             migrationBuilder.DropTable(
                 name: "Doors");

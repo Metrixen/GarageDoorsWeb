@@ -43,12 +43,7 @@ namespace GarageDoorsWeb.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserID")
-                        .HasColumnType("int");
-
                     b.HasKey("DoorID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Doors");
                 });
@@ -113,19 +108,25 @@ namespace GarageDoorsWeb.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GarageDoorsWeb.Models.Door", b =>
+            modelBuilder.Entity("GarageDoorsWeb.Models.UserDoor", b =>
                 {
-                    b.HasOne("GarageDoorsWeb.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID");
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    b.Property<int>("DoorID")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserID", "DoorID");
+
+                    b.HasIndex("DoorID");
+
+                    b.ToTable("UserDoors");
                 });
 
             modelBuilder.Entity("GarageDoorsWeb.Models.Logs", b =>
                 {
                     b.HasOne("GarageDoorsWeb.Models.Door", "Door")
-                        .WithMany()
+                        .WithMany("Logs")
                         .HasForeignKey("DoorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -141,9 +142,37 @@ namespace GarageDoorsWeb.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("GarageDoorsWeb.Models.UserDoor", b =>
+                {
+                    b.HasOne("GarageDoorsWeb.Models.Door", "Door")
+                        .WithMany("UserDoors")
+                        .HasForeignKey("DoorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GarageDoorsWeb.Models.User", "User")
+                        .WithMany("UserDoors")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Door");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GarageDoorsWeb.Models.Door", b =>
+                {
+                    b.Navigation("Logs");
+
+                    b.Navigation("UserDoors");
+                });
+
             modelBuilder.Entity("GarageDoorsWeb.Models.User", b =>
                 {
                     b.Navigation("Logs");
+
+                    b.Navigation("UserDoors");
                 });
 #pragma warning restore 612, 618
         }
