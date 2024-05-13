@@ -68,9 +68,9 @@ namespace GarageDoorsWeb.Pages
         {
             if (!string.IsNullOrEmpty(DoorName))
             {
-                var newDoor = new Door { DoorName = DoorName };
+                var newDoor = new Door { DoorName = DoorName , LastModified=DateTime.Now};
                 _doorService.AddDoor(newDoor);
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Admin");
             }
             else
             {
@@ -85,6 +85,7 @@ namespace GarageDoorsWeb.Pages
                 var door = _doorService.GetDoorById(id);
                 if (door != null)
                 {
+                    door.LastModified = DateTime.Now;
                     door.DoorName = newName;
                     _doorService.UpdateDoor(door);
                 }

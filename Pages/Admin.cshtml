@@ -50,6 +50,7 @@
         <tr>
             <th>Door Name</th>
             <th>Door ID</th>
+            <th>Actions</th> <!-- New column for actions -->
         </tr>
     </thead>
     <tbody>
@@ -58,6 +59,15 @@
             <tr>
                 <td>@door.DoorName</td>
                 <td>@door.DoorID</td>
+                <td>
+                    <form method="post" asp-page-handler="RenameDoor" asp-route-id="@door.DoorID">
+                        <input type="text" name="newName" value="@door.DoorName" required />
+                        <button type="submit">Save</button>
+                    </form>
+                    <form method="post" asp-page-handler="RemoveDoor" asp-route-id="@door.DoorID" onsubmit="return confirm('Are you sure you want to remove this door?');">
+                        <button type="submit">Remove Door</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
