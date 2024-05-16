@@ -42,11 +42,11 @@ namespace GarageDoorsWeb.Pages
         [HttpPost]
         public IActionResult OnPostAddUser()
         {
-            if (!ModelState.IsValid)
-            {
-                // If the model state is not valid, redisplay the form with validation errors
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    // If the model state is not valid, redisplay the form with validation errors //Not set Error
+            //    return Page();
+            //}
 
             // Convert the UserModel to a User entity
             var user = new User
