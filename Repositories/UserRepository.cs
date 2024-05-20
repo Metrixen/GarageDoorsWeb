@@ -22,6 +22,10 @@ namespace GarageDoorsWeb.Repositories
         {
             return _dbcontext.Users.Find(userId);
         }
+        public User GetUserByUsername(string username)
+        {
+            return _dbcontext.Users.FirstOrDefault(u => u.Username == username);
+        }
 
         public IEnumerable<User> GetAllUsers()
         {

@@ -32,6 +32,12 @@ namespace GarageDoorsWeb.Services
                 return Enumerable.Empty<UserDoor>();
             }
         }
+        public IEnumerable<Door> GetDoorsByUserId(int userId)
+        {
+            var userDoors = _userDoorRepository.GetAllUserDoors().Where(ud => ud.UserID == userId);
+            var doors = userDoors.Select(ud => ud.Door);
+            return doors;
+        }
         public void AddUserToDoor(int userId, int doorId)
         {
             // Check if the User exists

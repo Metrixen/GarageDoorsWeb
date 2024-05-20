@@ -6,5 +6,6 @@ namespace GarageDoorsWeb.Repositories.Contacts
     {
         void AddUserToDoor(UserDoor userDoor);
         UserDoor FindUserDoor(int userId, int doorId);
+        public IEnumerable<UserDoor> GetAllUserDoors();
     }
 }

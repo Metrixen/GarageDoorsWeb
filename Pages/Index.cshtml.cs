@@ -1,16 +1,22 @@
 ﻿using GarageDoorsWeb.Models;
 using GarageDoorsWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GarageDoorsWeb.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
+        private readonly IUserDoorService _userDoorService;
+        private readonly IUserService _userService;
         private readonly IDoorService _doorService;
 
-        public IndexModel(IDoorService doorService)
+        public IndexModel(IUserService userService, IUserDoorService userDoorService, IDoorService doorService)
         {
+            _userService = userService;
+            _userDoorService = userDoorService;
             _doorService = doorService;
         }
 
@@ -23,8 +29,9 @@ namespace GarageDoorsWeb.Pages
 
         public void OnGet()
         {
-            // Populate the list of doors
-            Doors = _doorService.GetAllDoors() ?? Enumerable.Empty<Door>();
+            var username = User.Identity.Name;
+            var user = _userService.GetUserByUsername(username);
+            Doors = _userDoorService.GetDoorsByUserId(user.UserID);
         }
 
        

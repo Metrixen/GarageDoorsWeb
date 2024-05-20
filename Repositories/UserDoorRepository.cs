@@ -1,5 +1,6 @@
 ﻿using GarageDoorsWeb.Models;
 using GarageDoorsWeb.Repositories.Contacts;
+using Microsoft.EntityFrameworkCore;
 
 namespace GarageDoorsWeb.Repositories
 {
@@ -22,6 +23,13 @@ namespace GarageDoorsWeb.Repositories
         public UserDoor FindUserDoor(int userId, int doorId)
         {
             return _context.UserDoors.FirstOrDefault(ud => ud.UserID == userId && ud.DoorID == doorId);
+        }
+        public IEnumerable<UserDoor> GetAllUserDoors()
+        {
+            return _context.UserDoors
+                           .Include(ud => ud.User) // Include related User
+                           .Include(ud => ud.Door) // Include related Door
+                           .ToList();
         }
     }
 }

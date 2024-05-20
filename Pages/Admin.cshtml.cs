@@ -1,10 +1,13 @@
 using GarageDoorsWeb.Models;
 using GarageDoorsWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GarageDoorsWeb.Pages
 {
+    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminModel : PageModel
     {
         private readonly IUserService _userService;
@@ -41,7 +44,7 @@ namespace GarageDoorsWeb.Pages
 
         [HttpPost]
         public IActionResult OnPostAddUser()
-        {
+        { 
             //if (!ModelState.IsValid)
             //{
             //    // If the model state is not valid, redisplay the form with validation errors //Not set Error
@@ -134,6 +137,11 @@ namespace GarageDoorsWeb.Pages
                 ModelState.AddModelError("", $"Error: {ex.Message}");
                 return Page();
             }
+        }
+        public IActionResult OnGetProtectedData()
+        {
+            var data = new { Message = "This is protected data." };
+            return new JsonResult(data);
         }
     }
 }

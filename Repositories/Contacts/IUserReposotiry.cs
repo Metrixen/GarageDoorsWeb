@@ -10,6 +10,7 @@ namespace GarageDoorsWeb.Repositories.Contacts
     public interface IUserRepository
     {
         User GetUserById(int userId);
+        User GetUserByUsername(string username);
         IEnumerable<User> GetAllUsers();
         void AddUser(User user);
         void UpdateUser(User user);

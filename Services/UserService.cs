@@ -21,12 +21,21 @@ namespace GarageDoorsWeb.Services
         {
             return _userRepository.GetUserById(userId);
         }
-
+        public User GetUserByUsername(string username)
+        {
+            return _userRepository.GetUserByUsername(username);
+        }
         public IEnumerable<User> GetAllUsers()
         {
             return _userRepository.GetAllUsers();
         }
+        public User ValidateUser(string username, string password)
+        {
+            var user = _userRepository.GetAllUsers()
+                .FirstOrDefault(u => u.Username == username && u.Password == password);
 
+            return user;
+        }
         public void CreateUser(User user)
         {
             _userRepository.AddUser(user);
