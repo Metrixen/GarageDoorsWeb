@@ -34,9 +34,59 @@ namespace GarageDoorsWeb.Services
         }
         public IEnumerable<Door> GetDoorsByUserId(int userId)
         {
-            var userDoors = _userDoorRepository.GetAllUserDoors().Where(ud => ud.UserID == userId);
-            var doors = userDoors.Select(ud => ud.Door);
-            return doors;
+            try
+            {
+                // Fetch UserDoor records for the given userId and include the associated Door entities
+                var userDoors = _dbcontext.UserDoors
+                    .Where(ud => ud.UserID == userId)
+                    .Include(ud => ud.Door)
+                    .ToList();
+
+                // Extract the Door entities from the UserDoor records
+                return userDoors.Select(ud => ud.Door).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); // Placeholder for actual logging
+
+                // Return an empty list on error to prevent null references elsewhere
+                return Enumerable.Empty<Door>();
+            }
+        }
+        public Door GetDoorById(int doorId)
+        {
+            var door = _dbcontext.Doors.Find(doorId);
+            if (door == null)
+            {
+                throw new ArgumentException("Door not found.");
+            }
+            return door;
+        }
+        public IEnumerable<UserDoor> GetUserDoorsByOwnerId(int ownerId)
+        {
+            try
+            {
+                // Get the doors owned by the user
+                var ownerDoors = _dbcontext.UserDoors
+                    .Where(ud => ud.UserID == ownerId)
+                    .Select(ud => ud.DoorID)
+                    .ToList();
+
+                // Get all user-door assignments for these doors
+                var userDoors = _dbcontext.UserDoors
+                    .Where(ud => ownerDoors.Contains(ud.DoorID))
+                    .Include(ud => ud.User)
+                    .Include(ud => ud.Door)
+                    .ToList();
+
+                return userDoors;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); // Placeholder for actual logging
+
+                return Enumerable.Empty<UserDoor>();
+            }
         }
         public void AddUserToDoor(int userId, int doorId)
         {

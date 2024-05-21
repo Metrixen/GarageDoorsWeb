@@ -30,7 +30,7 @@ namespace GarageDoorsWeb.Pages
             // Validate username and password (this is just a demo, you should use a user service)
             if (Username == "admin" && Password == "password")
             {
-                var token = _authService.GenerateJwtToken(Username, isAdmin: true);
+                var token = _authService.GenerateJwtToken(Username, isAdmin: true, isOwner: true);
                 HttpContext.Response.Cookies.Append("jwt", token, new CookieOptions { HttpOnly = true, Secure = true });
                 return new JsonResult(new { token });
             }

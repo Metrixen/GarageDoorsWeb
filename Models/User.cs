@@ -17,6 +17,8 @@ namespace GarageDoorsWeb.Models
         public bool isOnline { get; set; }
         public bool isBlocked { get; set; }
         public bool isAdmin { get; set; }
+        public bool isOwner { get; set; }
+        public int? CreatedBy { get; set; }
 
         // Navigation property to link Logs
         public virtual ICollection<Logs> Logs { get; set; } = new HashSet<Logs>();

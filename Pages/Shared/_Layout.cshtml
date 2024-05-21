@@ -31,6 +31,12 @@
                     <ul class="navbar-nav">
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
+                            @if (User.IsInRole("Owner") || User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-primary" asp-area="" asp-page="/ManageUsers">ManageUsers</a>
+                                </li>
+                            }
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">

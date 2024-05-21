@@ -12,6 +12,7 @@
         <tr>
             <th>Username</th>
             <th>User ID</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,11 @@
             <tr>
                 <td>@user.Username</td>
                 <td>@user.UserID</td>
+                <td>
+                    <form method="post" asp-page-handler="DeleteUser" asp-route-id="@user.UserID" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
@@ -39,6 +45,10 @@
     <div class="form-check mr-2">
         <input type="checkbox" id="isAdmin" asp-for="NewUser.isAdmin" class="form-check-input" />
         <label for="isAdmin" class="form-check-label">Is Admin</label>
+    </div>
+    <div class="form-check mr-2">
+        <input type="checkbox" id="isOwner" asp-for="NewUser.isOwner" class="form-check-input" />
+        <label for="isOwner" class="form-check-label">Is Owner</label>
     </div>
     <button type="submit" class="btn btn-primary">Create User</button>
 </form>
@@ -100,7 +110,7 @@
                 <td>@userdoor.User.Username</td>
                 <td>@userdoor.User.UserID</td>
                 <td>@userdoor.Door.DoorName</td>
-                <td>@userdoor.Door.DoorName</td>
+                <td>@userdoor.Door.DoorID</td>
             </tr>
         }
     </tbody>

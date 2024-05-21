@@ -18,18 +18,34 @@ namespace GarageDoorsWeb.Services
             _audience = audience;
         }
 
-        public string GenerateJwtToken(string username, bool isAdmin)
+        public string GenerateJwtToken(string username, bool isAdmin, bool isOwner)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_secretKey);
 
+            var role = "User";
+            if (isAdmin)
+            {
+                role = "Admin";
+            }
+            if (isAdmin == true && isOwner == true)
+            {
+                role = "Admin";
+            }
+            else if (isOwner)
+            {
+                role = "Owner";
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role)
+            };
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Role, isAdmin ? "Admin" : "User")
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(1),
                 Issuer = _issuer,
                 Audience = _audience,

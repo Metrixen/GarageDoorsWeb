@@ -12,8 +12,9 @@ namespace GarageDoorsWeb.Services
         User GetUserById(int userId);
         User GetUserByUsername(string username);
         IEnumerable<User> GetAllUsers();
+        IEnumerable<User> GetUsersCreatedBy(int creatorUserId);
         User ValidateUser(string username, string password);
-        void CreateUser(User user);
+        void CreateUser(User user, int? createdByUserId);
         void UpdateUser(User user);
         void DeleteUser(int userId);
     }

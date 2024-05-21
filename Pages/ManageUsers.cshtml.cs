@@ -3,12 +3,12 @@ using GarageDoorsWeb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Linq;
 
 namespace GarageDoorsWeb.Pages
 {
-    [Authorize]
-    [Authorize(Roles = "Admin")]
-    public class AdminModel : PageModel
+    [Authorize(Roles = "Admin,Owner")]
+    public class ManageUsersModel : PageModel
     {
         private readonly IUserService _userService;
         private readonly IDoorService _doorService;
@@ -21,36 +21,35 @@ namespace GarageDoorsWeb.Pages
         [BindProperty]
         public string DoorName { get; set; }
         public List<Door> Doors { get; set; }
-        public List<UserDoor> UserDoor { get; set; }
+        public IEnumerable<UserDoor> UserDoors { get; set; }
+        public IEnumerable<Door> UserDoorsList { get; set; }
+        public IEnumerable<UserDoor> UserAssignedDoors { get; set; }
 
         [BindProperty]
         public int SelectedUserId { get; set; }  // Bind these properties to dropdowns in the UI
 
         [BindProperty]
         public int SelectedDoorId { get; set; }
-
-        public AdminModel(IUserService userService, IDoorService doorService, IUserDoorService userDoorService)
+        public ManageUsersModel(IUserService userService, IUserDoorService userDoorService , IDoorService doorService)
         {
             _userService = userService;
-            _doorService = doorService;
             _userDoorService = userDoorService;
+            _doorService = doorService;
         }
+
         public void OnGet()
         {
-            Users = _userService.GetAllUsers();
+            var currentUser = _userService.GetUserByUsername(User.Identity.Name);
+            Users = _userService.GetUsersCreatedBy(currentUser.UserID);
             Doors = _doorService.GetAllDoors().ToList();
-            UserDoor = _userDoorService.GetAllUserDoors().ToList();
+            UserDoors = _userDoorService.GetAllUserDoors()
+                   .Where(ud => ud.UserID == currentUser.UserID);
+            UserDoorsList = _userDoorService.GetDoorsByUserId(currentUser.UserID);
+            UserAssignedDoors = _userDoorService.GetUserDoorsByOwnerId(currentUser.UserID);
         }
 
-        [HttpPost]
         public IActionResult OnPostAddUser()
-        { 
-            //if (!ModelState.IsValid)
-            //{
-            //    // If the model state is not valid, redisplay the form with validation errors //Not set Error
-            //    return Page();
-            //}
-
+        {
             // Convert the UserModel to a User entity
             var user = new User
             {
@@ -58,30 +57,18 @@ namespace GarageDoorsWeb.Pages
                 Username = NewUser.Username,
                 Password = NewUser.Password,
                 isAdmin = NewUser.isAdmin,
-                isOwner = NewUser.isOwner,
+                isOwner = NewUser.isOwner
             };
+
+            // Get the current user's UserID
             var currentUser = _userService.GetUserByUsername(User.Identity.Name);
             var createdByUserId = currentUser?.UserID;
+
             // Add the new user to the database via the service
             _userService.CreateUser(user, createdByUserId);
 
             // Redirect to a different page or return a success message
-            return RedirectToPage("/Admin");
-        }
-        // Handler for adding a new door
-        public IActionResult OnPostAddDoor()
-        {
-            if (!string.IsNullOrEmpty(DoorName))
-            {
-                var newDoor = new Door { DoorName = DoorName , LastModified=DateTime.Now};
-                _doorService.AddDoor(newDoor);
-                return RedirectToPage("/Admin");
-            }
-            else
-            {
-                Doors = (List<Door>)(_doorService.GetAllDoors() ?? Enumerable.Empty<Door>()); // Initialize Doors
-                return Page();
-            }
+            return RedirectToPage("/ManageUsers");
         }
         public IActionResult OnPostRenameDoor(int id, string newName)
         {
@@ -103,13 +90,7 @@ namespace GarageDoorsWeb.Pages
                 return Page();
             }
         }
-        public IActionResult OnPostRemoveDoor(int id)
-        {
-            _doorService.DeleteDoor(id);
-            return RedirectToPage();
-        }
 
-        [HttpPost]
         public IActionResult OnPostAssignUserToDoor()
         {
             try
@@ -125,7 +106,6 @@ namespace GarageDoorsWeb.Pages
             }
         }
 
-        [HttpPost]
         public IActionResult OnPostUnassignUserFromDoor()
         {
             try
@@ -140,11 +120,7 @@ namespace GarageDoorsWeb.Pages
                 return Page();
             }
         }
-        public IActionResult OnGetProtectedData()
-        {
-            var data = new { Message = "This is protected data." };
-            return new JsonResult(data);
-        }
+
         public IActionResult OnPostDeleteUser(int id)
         {
             _userService.DeleteUser(id);

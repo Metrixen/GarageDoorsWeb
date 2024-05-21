@@ -24,7 +24,7 @@ namespace GarageDoorsWeb.Controllers
                 return Unauthorized("Invalid username or password.");
             }
 
-            var token = _authService.GenerateJwtToken(user.Username, user.isAdmin);
+            var token = _authService.GenerateJwtToken(user.Username, user.isAdmin, user.isOwner);
 
             var cookieOptions = new CookieOptions
             {

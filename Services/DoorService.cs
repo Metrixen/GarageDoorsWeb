@@ -45,6 +45,16 @@ namespace GarageDoorsWeb.Services
             }
             return door;
         }
+        public IEnumerable<Door> GetDoorsByUserId(int userid)
+        {
+            var userDoors = _dbcontext.UserDoors
+                .Where(ud => ud.UserID == userid)
+                .Include(ud => ud.Door)
+                .Select(ud => ud.Door)
+                .ToList();
+
+            return userDoors;
+        }
         public void UpdateDoor(Door door)
         {
             _dbcontext.Doors.Update(door);

@@ -21,6 +21,7 @@ namespace GarageDoorsWeb
 
         public async Task Invoke(HttpContext context)
         
+        
         {
             Console.WriteLine($"Processing request for {context.Request.Path}");
             var token = context.Request.Cookies["jwt"];

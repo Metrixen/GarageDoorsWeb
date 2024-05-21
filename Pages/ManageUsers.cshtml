@@ -1,0 +1,78 @@
+﻿@page
+@model GarageDoorsWeb.Pages.ManageUsersModel
+@{
+}
+<h2>Users Created By You</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>User ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.UserID</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Add New User Form -->
+<h3>Create New User</h3>
+<form method="post" asp-page-handler="AddUser" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <label for="username" class="sr-only">Username:</label>
+        <input type="text" id="username" asp-for="NewUser.Username" class="form-control" placeholder="Username" />
+    </div>
+    <div class="form-group mr-2">
+        <label for="password" class="sr-only">Password:</label>
+        <input type="password" id="password" asp-for="NewUser.Password" class="form-control" placeholder="Password" />
+    </div>
+   @*  <div class="form-check mr-2">
+        <input type="checkbox" id="isAdmin" asp-for="NewUser.isAdmin" class="form-check-input" />
+        <label for="isAdmin" class="form-check-label">Is Admin</label>
+    </div> *@
+    <button type="submit" class="btn btn-primary">Create User</button>
+</form>
+
+<h2>Assigned Users-Doors</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>UserID</th>
+            <th>Door Name</th>
+            <th>DoorID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var userdoor in Model.UserAssignedDoors)
+        {
+            <tr>
+                <td>@userdoor.User.Username</td>
+                <td>@userdoor.User.UserID</td>
+                <td>@userdoor.Door.DoorName</td>
+                <td>@userdoor.Door.DoorID</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Assignment Section -->
+<h2>Assign or Unassign User to Door</h2>
+<form method="post">
+    <div class="form-group">
+        <label for="userSelect">Select User:</label>
+        <select id="userSelect" asp-for="SelectedUserId" asp-items="@(new SelectList(Model.Users, "UserID", "Username"))" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label for="doorSelect">Select Door:</label>
+        <select id="doorSelect" asp-for="SelectedDoorId" asp-items="@(new SelectList(Model.UserDoorsList, "DoorID", "DoorName"))" class="form-control"></select>
+    </div>
+    <button type="submit" asp-page-handler="AssignUserToDoor" class="btn btn-primary">Assign</button>
+    <button type="submit" asp-page-handler="UnassignUserFromDoor" class="btn btn-warning">Unassign</button>
+</form>
