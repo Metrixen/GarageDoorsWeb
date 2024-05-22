@@ -19,7 +19,7 @@
             <div class="col-md-6">
                 <h2 class="mb-4">Login</h2>
 
-                 <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+                <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
                 <!-- Login Form -->
                 <form id="loginForm">
@@ -57,18 +57,53 @@
                     return response.json();
                 })
                 .then(data => {
+                    console.log('Server response:', data); // Add logging
+
+                    // Redirect to the desired page
                     if (data.redirectUrl) {
                         window.location.href = data.redirectUrl;
                     } else {
-                        alert('Login failed!');
+                        alert('Login successful, but no redirect URL provided.');
                     }
                 })
                 .catch(error => {
+                    console.error('Error:', error); // Add logging
                     var errorMessage = document.getElementById("error-message");
                     errorMessage.textContent = error.message || 'Login failed!';
                     errorMessage.style.display = 'block';
                 });
         }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function authenticatedRequest(url, options = {}) {
+            const token = getCookie('jwt');
+            if (!options.headers) {
+                options.headers = {};
+            }
+            options.headers['Authorization'] = `Bearer ${token}`;
+            return fetch(url, options);
+        }
+
+                // Example usage:
+                // document.addEventListener('DOMContentLoaded', () => {
+                //     authenticatedRequest('/protected-endpoint', {
+                //         method: 'GET'
+                //     }).then(response => {
+                //         if (!response.ok) {
+                //             throw new Error('Failed to fetch protected resource');
+                //         }
+                //         return response.json();
+                //     }).then(data => {
+                //         console.log(data);
+                //     }).catch(error => {
+                //         console.error('Error:', error);
+                //     });
+                // });
     </script>
 </body>
 </html>
