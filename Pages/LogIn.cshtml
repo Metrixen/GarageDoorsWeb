@@ -12,12 +12,29 @@
     <title>Login</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            margin-top: 100px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .login-title {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="mb-4">Login</h2>
+            <div class="col-md-6 login-container">
+                <h2 class="login-title text-center">Login</h2>
 
                 <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
@@ -31,7 +48,7 @@
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="login()">Login</button>
                 </form>
                 <!-- End Login Form -->
             </div>
@@ -89,21 +106,21 @@
             return fetch(url, options);
         }
 
-                // Example usage:
-                // document.addEventListener('DOMContentLoaded', () => {
-                //     authenticatedRequest('/protected-endpoint', {
-                //         method: 'GET'
-                //     }).then(response => {
-                //         if (!response.ok) {
-                //             throw new Error('Failed to fetch protected resource');
-                //         }
-                //         return response.json();
-                //     }).then(data => {
-                //         console.log(data);
-                //     }).catch(error => {
-                //         console.error('Error:', error);
-                //     });
-                // });
+        // Example usage:
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     authenticatedRequest('/protected-endpoint', {
+        //         method: 'GET'
+        //     }).then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Failed to fetch protected resource');
+        //         }
+        //         return response.json();
+        //     }).then(data => {
+        //         console.log(data);
+        //     }).catch(error => {
+        //         console.error('Error:', error);
+        //     });
+        // });
     </script>
 </body>
 </html>
