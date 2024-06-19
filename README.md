@@ -3,6 +3,22 @@
 
 GarageDoorsWeb is a versatile web application designed to remotely manage and control garage doors. The system utilizes an Arduino for relay control, acting as button remotes for the garage doors. The web application is hosted on a Raspberry Pi 4, with a domain purchased from Namecheap. Future plans include the development of a mobile app for enhanced accessibility.
 
+## Table of Contents
+- [Features](#features)
+- [Architecture](#architecture)
+  - [Components](#components)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Running on Windows](#running-on-windows)
+    - [Hosting on Raspberry Pi](#hosting-on-raspberry-pi)
+  - [Creating the Database](#creating-the-database)
+- [Usage](#usage)
+  - [Account Types](#account-types)
+  - [Steps to Use](#steps-to-use)
+- [Future Plans](#future-plans)
+- [Acknowledgments](#acknowledgments)
+
 ## Features
 
 - **Remote Control:** Manage your garage doors remotely through a web interface.
@@ -181,10 +197,6 @@ There are three types of accounts:
 
 - **Mobile App Development:** We are planning to develop a mobile app to provide a more user-friendly and accessible way to control your garage doors.
 - **Additional Features:** Exploring options for integrating more features such as voice control, enhanced security measures, and more.
-
-## License
-
-This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. For more details, see the [LICENSE](LICENSE) file or visit the [official license page](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode).
 
 ## Acknowledgments
 
