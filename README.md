@@ -152,15 +152,15 @@ There are three types of accounts:
    - Navigate to the admin panel.
    - Manage users: see list of all users,create new users, delete existing users.
 
-    ![Admin Panel](https://ibb.co/58jTbkY)
+    ![Admin Panel](images/AdminPanel1.png)
 
    - Manage doors: create new doors, delete or rename existing doors.
 
-    ![Admin Panel](https://ibb.co/hyMtcWJ)
+    ![Admin Panel](images/AdminPanel2.png)
 
    - Assign doors to users.
 
-    ![Admin Panel](https://ibb.co/WkHCkW3)
+    ![Admin Panel](images/AdminPanel3.png)
    
 3. **Owner Panel:**
    - Users created by you.
@@ -168,13 +168,13 @@ There are three types of accounts:
    - List of the people that are assigned to your doors.
    - Assign/Unassign doors to specific users.
 
-   ![Owner Panel](https://ibb.co/FHjTFvN)
+   ![Owner Panel](images/OwnerPanel1.png)
 
 4. **Control Doors:**
    - Open or close your garage doors remotely from the web interface.
    - View real-time status updates of your garage doors.
 
-   ![Home Page](https://ibb.co/VwcF8j6)
+   ![Home Page](images/HomePage.png)
 
 
 ## Future Plans
