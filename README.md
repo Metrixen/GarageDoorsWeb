@@ -1,3 +1,6 @@
+
+# GarageDoorsWeb
+
 GarageDoorsWeb is a versatile web application designed to remotely manage and control garage doors. The system utilizes an Arduino for relay control, acting as button remotes for the garage doors. The web application is hosted on a Raspberry Pi 4, with a domain purchased from Namecheap. Future plans include the development of a mobile app for enhanced accessibility.
 
 ## Features
@@ -41,7 +44,7 @@ GarageDoorsWeb is a versatile web application designed to remotely manage and co
 
 1. **Clone the Repository:**
     ```sh
-    git clone https://github.com/yourusername/GarageDoorsWeb.git
+    git clone https://github.com/Metrixen/GarageDoorsWeb.git
     cd GarageDoorsWeb
     ```
 
@@ -67,7 +70,7 @@ GarageDoorsWeb is a versatile web application designed to remotely manage and co
 
 1. **Clone the Repository:**
     ```sh
-    git clone https://github.com/yourusername/GarageDoorsWeb.git
+    git clone https://github.com/Metrixen/GarageDoorsWeb.git
     cd GarageDoorsWeb
     ```
 
@@ -96,7 +99,7 @@ GarageDoorsWeb is a versatile web application designed to remotely manage and co
 
 7. **Run the Application on Raspberry Pi:**
     ```sh
-    cd /path/to/your/out/directory
+    cd /path/to/your/directory
     dotnet GarageDoorsWeb.dll
     ```
 
@@ -118,26 +121,73 @@ GarageDoorsWeb is a versatile web application designed to remotely manage and co
 
 ## Usage
 
-- **Login:** Use your credentials to log in securely.
-- **Control:** Open or close your garage doors remotely from the web interface.
-- **Status Updates:** View real-time status updates of your garage doors.
+### Account Types
+
+There are three types of accounts:
+
+- **Admin**
+  - Access to the admin panel where they can:
+    - View all users
+    - Create and remove users
+    - View all doors
+    - Create and remove doors
+    - Rename doors
+    - Assign doors to users
+
+- **Owner**
+  - Can view and control the doors assigned to them.
+  - Can create and remove users.
+  - Can assign/unassign users to his doors.
+
+- **User**
+  - Can view and control the doors assigned to them.
+
+### Steps to Use
+
+1. **Login:**
+   - Use your credentials to log in securely.
+   - Depending on your account type (Admin, Owner, User), you will have different access levels.
+
+2. **Admin Panel (Admin Only):**
+   - Navigate to the admin panel.
+   - Manage users: see list of all users,create new users, delete existing users.
+
+    ![Admin Panel](https://ibb.co/58jTbkY)
+
+   - Manage doors: create new doors, delete or rename existing doors.
+
+    ![Admin Panel](https://ibb.co/hyMtcWJ)
+
+   - Assign doors to users.
+
+    ![Admin Panel](https://ibb.co/WkHCkW3)
+   
+3. **Owner Panel:**
+   - Users created by you.
+   - Create users.
+   - List of the people that are assigned to your doors.
+   - Assign/Unassign doors to specific users.
+
+   ![Owner Panel](https://ibb.co/FHjTFvN)
+
+4. **Control Doors:**
+   - Open or close your garage doors remotely from the web interface.
+   - View real-time status updates of your garage doors.
+
+   ![Home Page](https://ibb.co/VwcF8j6)
+
 
 ## Future Plans
 
 - **Mobile App Development:** We are planning to develop a mobile app to provide a more user-friendly and accessible way to control your garage doors.
-- **Additional Features:** Exploring options for integrating more features such as video control, enhanced security measures, and more.
-
-## Contributing
-
-We welcome contributions to GarageDoorsWeb! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
+- **Additional Features:** Exploring options for integrating more features such as voice control, enhanced security measures, and more.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. For more details, see the [LICENSE](LICENSE) file or visit the [official license page](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode).
 
 ## Acknowledgments
 
 - **ASP.NET Core:** For the robust web framework.
 - **ESP8266:** For the reliable WiFi connectivity.
 - **Namecheap:** For domain registration services.
-- **Community:** For the support and contributions.
