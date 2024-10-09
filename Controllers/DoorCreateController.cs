@@ -10,10 +10,12 @@ namespace GarageDoorsWeb.Controllers
     {
         private readonly IDoorService _doorService;
         private readonly IUserDoorService _userDoorService;
+        private readonly IUserService _userService;
 
-        public DoorCreateController(IDoorService doorService)
+        public DoorCreateController(IDoorService doorService, IUserService userService)
         {
             _doorService = doorService;
+            _userService = userService;
         }
 
         // GET: Door
@@ -66,8 +68,13 @@ namespace GarageDoorsWeb.Controllers
             
             // Toggle the IsOpen property
             door.IsOpen = !door.IsOpen;
+            int userId = _userService.GetUserByUsername(User.Identity.Name)?.UserID ?? 0;
 
-            _doorService.UpdateDoor(door);
+            if (userId == 0)
+            {
+                return BadRequest("User not found");
+            }
+            _doorService.UpdateDoor(door,userId);
             return RedirectToAction(nameof(Index));
         }
 
@@ -83,7 +90,8 @@ namespace GarageDoorsWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                _doorService.UpdateDoor(door);
+                int userId = _userService.GetUserByUsername(User.Identity.Name)?.UserID ?? 0;
+                _doorService.UpdateDoor(door,userId);
                 return RedirectToAction(nameof(Index));
             }
             return View(door);

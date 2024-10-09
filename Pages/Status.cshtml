@@ -1,18 +1,6 @@
 ﻿@page
-@using GarageDoorsWeb.Models
 @model GarageDoorsWeb.Pages.StatusModel
 @{
-    ViewData["Title"] = "Status";
+    Layout = null; // Ensure no layout is being applied
 }
-
-<h1>
-    @foreach (var door in Model.Doors)
-    {
-        <tr>
-            @*<td>@door.IsOpen</td>*@
-            <td>@(door.IsOpen ? "Unlocked" : "Locked")</td>
-
-        </tr>
-    }
-</h1>
 

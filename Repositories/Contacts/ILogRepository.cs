@@ -12,5 +12,6 @@ namespace GarageDoorsWeb.Repositories.Contacts
         void AddLog(Logs log);
         IEnumerable<Logs> GetLogsByUserId(int userId);
         IEnumerable<Logs> GetLogsByDoorId(int doorId);
+        IEnumerable<Logs> GetLogsByDate(DateTime date);
     }
 }

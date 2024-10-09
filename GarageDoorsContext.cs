@@ -37,6 +37,17 @@ namespace GarageDoorsWeb
                 .HasOne(ud => ud.Door)
                 .WithMany(d => d.UserDoors)
                 .HasForeignKey(ud => ud.DoorID);
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    UserID = 1,
+                    Username = "Admin",
+                    Password = "123",
+                    isAdmin = true,
+                    isOwner = true
+                }
+            );
         }
 
     }

@@ -79,7 +79,9 @@ namespace GarageDoorsWeb.Pages
                 {
                     door.LastModified = DateTime.Now;
                     door.DoorName = newName;
-                    _doorService.UpdateDoor(door);
+                    var currentUser = _userService.GetUserByUsername(User.Identity.Name);
+                    int createdByUserId = (int)(currentUser?.UserID);
+                    _doorService.UpdateDoor(door,createdByUserId);
                 }
                 return RedirectToPage();
             }

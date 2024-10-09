@@ -105,7 +105,7 @@ namespace GarageDoorsWeb
             app.MapDefaultControllerRoute();
             app.MapRazorPages();
             
-            app.Run("http://0.0.0.0:5000");
+            app.Run("http://localhost:5000");
         }
     }
 }

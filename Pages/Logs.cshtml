@@ -1,0 +1,51 @@
+﻿@page
+@model LogsModel
+@{
+    ViewData["Title"] = "View Logs";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Form to select date -->
+<form method="get">
+    <div class="form-group">
+        <label for="SelectedDate">Select Date</label>
+        <input type="date" class="form-control" id="SelectedDate" name="SelectedDate" value="@Model.SelectedDate?.ToString("yyyy-MM-dd")" />
+    </div>
+    <button type="submit" class="btn btn-primary">Get Logs</button>
+</form>
+
+<hr />
+
+<!-- Display Logs -->
+@if (Model.Logs != null && Model.Logs.Any())
+{
+    <h4>Logs for @Model.SelectedDate?.ToString("D")</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Log ID</th>
+                <th>Username</th>
+                <th>Door Name</th>
+                <th>Action</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model.Logs)
+            {
+                <tr>
+                    <td>@log.LogID</td>
+                    <td>@log.Username</td>
+                    <td>@log.DoorName</td>
+                    <td>@log.Action</td>
+                    <td>@log.Date.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No logs found for the selected date.</p>
+}

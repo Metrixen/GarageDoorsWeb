@@ -1,5 +1,6 @@
 ﻿using GarageDoorsWeb.Models;
 using GarageDoorsWeb.Repositories.Contacts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,14 @@ namespace GarageDoorsWeb.Repositories
         public IEnumerable<Logs> GetLogsByDoorId(int doorId)
         {
             return _context.Logs.Where(log => log.DoorID == doorId).ToList();
+        }
+
+        public IEnumerable<Logs> GetLogsByDate(DateTime date)
+        {
+            // Include all logs that occurred on the given date
+            return _context.Logs
+                             .Where(log => log.Date.Date == date.Date)
+                             .ToList();
         }
     }
 

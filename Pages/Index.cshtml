@@ -24,7 +24,7 @@
                 <td>@door.IsOpen</td>
                 <td>
                     <form method="post" asp-page-handler="ToggleDoor" asp-route-doorId="@door.DoorID">
-                        <button type="submit" class="btn btn-primary">Change Status</button>
+                        <button id="btn-@door.DoorID" type="submit" class="btn btn-primary">Change Status</button>
                     </form>
                 </td>
             </tr>
@@ -35,34 +35,35 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const forms = document.querySelectorAll('form');  // Get all forms on the page
+        // Check if a button was previously clicked and needs to be disabled
+        const disabledButtonId = localStorage.getItem('disabledButtonId');
+        const disabledUntil = localStorage.getItem('disabledUntil');
+        const currentTime = new Date().getTime();
 
-        forms.forEach(form => {
-            const button = form.querySelector('button[type="submit"]');  // Find the submit button in the form
-
-            // Check if the button should be disabled on page load
-            const disabledUntil = localStorage.getItem('disabledUntil');
-            if (disabledUntil && new Date().getTime() < disabledUntil) {
-                button.disabled = true;
-                const timeoutDuration = disabledUntil - new Date().getTime();
+        if (disabledButtonId && disabledUntil && currentTime < disabledUntil) {
+            const buttonToDisable = document.getElementById(disabledButtonId);
+            if (buttonToDisable) {
+                buttonToDisable.disabled = true;
+                // Calculate remaining time and set timeout to re-enable the button
+                const remainingTime = disabledUntil - currentTime;
                 setTimeout(() => {
-                    button.disabled = false;
-                    localStorage.removeItem('disabledUntil'); // Clear after re-enabling
-                }, timeoutDuration);
+                    buttonToDisable.disabled = false;
+                    // Clear the localStorage after re-enabling the button
+                    localStorage.removeItem('disabledButtonId');
+                    localStorage.removeItem('disabledUntil');
+                }, remainingTime);
             }
+        }
 
-            // Add submit event listener to the form
-            form.addEventListener('submit', function (event) {
-                const disabledFor = 20000; // Disable time in milliseconds (20 seconds)
-                const currentTime = new Date().getTime();
-                const disableUntil = currentTime + disabledFor;
+        // Attach event listeners to all buttons
+        const buttons = document.querySelectorAll('button[type="submit"]');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Save the ID of the clicked button and the disabled time (20 seconds from now) to localStorage
+                localStorage.setItem('disabledButtonId', this.id);
+                const disableDuration = 1000; // 1 seconds
+                const disableUntil = new Date().getTime() + disableDuration;
                 localStorage.setItem('disabledUntil', disableUntil);
-
-                // Optionally, immediately disable the button to prevent further clicks
-                button.disabled = true;
-                setTimeout(() => {
-                    button.disabled = false;  // This will only re-enable after reload
-                }, disabledFor);
             });
         });
     });
