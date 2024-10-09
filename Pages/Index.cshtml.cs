@@ -43,7 +43,9 @@ namespace GarageDoorsWeb.Pages
             {
                 var door = _doorService.GetDoorById(doorId);
                 door.IsOpen = !door.IsOpen;
-                _doorService.UpdateDoor(door);
+                var currentUser = _userService.GetUserByUsername(User.Identity.Name);
+                int createdByUserId = (int)(currentUser?.UserID);
+                _doorService.UpdateDoor(door, createdByUserId);
                 return RedirectToPage("/Index");
             }
             catch (ArgumentException ex)

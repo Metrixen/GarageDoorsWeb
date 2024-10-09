@@ -11,10 +11,12 @@ namespace GarageDoorsWeb.Services
     public class DoorService:IDoorService
     {
         private readonly GarageDoorsContext _dbcontext;
+        private readonly ILogService _logService;
 
-        public DoorService(GarageDoorsContext context)
+        public DoorService(GarageDoorsContext context, ILogService logService)
         {
             _dbcontext = context;
+            _logService = logService;
         }
         public void AddDoor(Door door)
         {
@@ -55,10 +57,17 @@ namespace GarageDoorsWeb.Services
 
             return userDoors;
         }
-        public void UpdateDoor(Door door)
+        public void UpdateDoor(Door door, int userID)
         {
             _dbcontext.Doors.Update(door);
             _dbcontext.SaveChanges();
+
+
+            // Log the action
+            string action = door.IsOpen ? "Opened" : "Closed";
+            string description = $"Door {door.DoorID} was {action.ToLower()} by user {userID}";
+
+            _logService.LogUserAction(userID, door.DoorID, action);
         }
 
         public void DeleteDoor(int doorId)
@@ -79,15 +88,9 @@ namespace GarageDoorsWeb.Services
                 _dbcontext.SaveChanges();
 
                 // Log the action
-                var log = new Logs
-                {
-                    UserID = userId,
-                    DoorID = doorId,
-                    Date = DateTime.Now,
-                    Action = isOpen ? "Opened" : "Closed"
-                };
-                _dbcontext.Logs.Add(log);
-                _dbcontext.SaveChanges();
+                string action = isOpen ? "Opened" : "Closed";
+
+                _logService.LogUserAction(userId, doorId, action);
             }
         }
     }

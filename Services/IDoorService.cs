@@ -13,7 +13,7 @@ namespace GarageDoorsWeb.Services
         IEnumerable<Door> GetAllDoors();
         Door GetDoorById(int doorId);
         IEnumerable<Door> GetDoorsByUserId(int userid);
-        void UpdateDoor(Door door);
+        void UpdateDoor(Door door, int userID);
         void DeleteDoor(int doorId);
         void ToggleDoor(int doorId, int userId, bool isOpen);
 

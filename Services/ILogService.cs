@@ -12,5 +12,6 @@ namespace GarageDoorsWeb.Services
         void LogUserAction(int userId, int doorId, string action);
         IEnumerable<Logs> GetLogsByUser(int userId);
         IEnumerable<Logs> GetLogsByDoor(int doorId);
+        IEnumerable<Logs> GetLogsByDate(DateTime date);
     }
 }

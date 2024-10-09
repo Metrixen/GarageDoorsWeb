@@ -40,5 +40,10 @@ namespace GarageDoorsWeb.Services
         {
             return _logRepository.GetLogsByDoorId(doorId);
         }
+
+        public IEnumerable<Logs> GetLogsByDate(DateTime date)
+        {
+            return _logRepository.GetLogsByDate(date);
+        }
     }
 }

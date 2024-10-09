@@ -66,7 +66,7 @@ namespace GarageDoorsWeb.Controllers.Api
                 return NotFound("Door not found.");
             }
 
-            _doorService.UpdateDoor(door);
+            _doorService.UpdateDoor(door,1);
             return NoContent();
         }
 
