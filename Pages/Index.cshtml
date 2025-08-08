@@ -18,10 +18,10 @@
     <tbody>
         @foreach (var door in Model.Doors)
         {
-            <tr>
+            <tr data-door-id="@door.DoorID">
                 <td>@door.DoorID</td>
                 <td>@door.DoorName</td>
-                <td>@door.IsOpen</td>
+                <td data-status>@door.IsOpen</td>
                 <td>
                     <form method="post" asp-page-handler="ToggleDoor" asp-route-doorId="@door.DoorID">
                         <button id="btn-@door.DoorID" type="submit" class="btn btn-primary">Change Status</button>
@@ -31,6 +31,64 @@
         }
     </tbody>
 </table>
+
+@* Include SignalR client library and set up a connection to receive real-time door
+   status updates.  When a message is received on the 'ReceiveDoorStatus' event
+   from the server hub, update the corresponding row in the table to reflect
+   whether the door is open or closed. *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.7/signalr.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Existing logic for disabling buttons temporarily
+        const disabledButtonId = localStorage.getItem('disabledButtonId');
+        const disabledUntil = localStorage.getItem('disabledUntil');
+        const currentTime = new Date().getTime();
+        if (disabledButtonId && disabledUntil && currentTime < disabledUntil) {
+            const buttonToDisable = document.getElementById(disabledButtonId);
+            if (buttonToDisable) {
+                buttonToDisable.disabled = true;
+                const remainingTime = disabledUntil - currentTime;
+                setTimeout(() => {
+                    buttonToDisable.disabled = false;
+                    localStorage.removeItem('disabledButtonId');
+                    localStorage.removeItem('disabledUntil');
+                }, remainingTime);
+            }
+        }
+        const buttons = document.querySelectorAll('button[type="submit"]');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                localStorage.setItem('disabledButtonId', this.id);
+                const disableDuration = 1000; // 1 second
+                const disableUntil = new Date().getTime() + disableDuration;
+                localStorage.setItem('disabledUntil', disableUntil);
+            });
+        });
+
+        // Establish SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/doorHub')
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        // Listen for door status updates from the hub
+        connection.on('ReceiveDoorStatus', function (doorId, isOpen) {
+            // Find the table row corresponding to this door ID
+            const row = document.querySelector(`tr[data-door-id="${doorId}"]`);
+            if (row) {
+                const statusCell = row.querySelector('td[data-status]');
+                if (statusCell) {
+                    statusCell.textContent = isOpen ? 'True' : 'False';
+                }
+            }
+        });
+
+        // Start the connection
+        connection.start().catch(function (err) {
+            console.error(err.toString());
+        });
+    });
+</script>
 
 
 <script>

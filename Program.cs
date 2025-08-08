@@ -21,6 +21,12 @@ namespace GarageDoorsWeb
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            // Register SignalR for real-time functionality.
+            builder.Services.AddSignalR();
+            // Register the notification service used to send push notifications when
+            // door states change.  The default implementation logs notifications
+            // but can be extended to integrate with external providers.
+            builder.Services.AddSingleton<INotificationService, NotificationService>();
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");
             var key = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Secret"));
@@ -104,6 +110,9 @@ namespace GarageDoorsWeb
 
             app.MapDefaultControllerRoute();
             app.MapRazorPages();
+            // Map the SignalR hub to the '/doorHub' endpoint.  Clients will connect
+            // here to receive real-time updates about door status changes.
+            app.MapHub<GarageDoorsWeb.Hubs.DoorStatusHub>("/doorHub");
             
             app.Run("http://localhost:5000");
         }
