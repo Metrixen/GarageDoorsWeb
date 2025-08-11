@@ -1,0 +1,15 @@
+{
+  "name": "garagedoorsweb",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sass": "^1.90.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.1"
+  }
+}
