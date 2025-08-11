@@ -1,142 +1,111 @@
-﻿@page
+@page
 @model GarageDoorsWeb.Pages.ManageUsersModel
 @{
     ViewData["Title"] = "Manage Users";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
 
-        .container2 {
-            margin-top: 30px;
-            padding-bottom: 55px;
-        }
+@section Styles {
+    <link rel="stylesheet" href="~/css/manage-users.css" asp-append-version="true" />
+}
 
-        .section-title {
-            margin-bottom: 20px;
-            color: #343a40;
-        }
-
-        .form-inline .form-control {
-            width: auto;
-        }
-    </style>
-</head>
-<body>
-    <div class="container2">
-        <!-- Users Created By You -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h2 class="section-title">Users Created By You</h2>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-light">
+<div class="container2">
+    <!-- Users Created By You -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="section-title">Users Created By You</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Username</th>
+                        <th>User ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
                         <tr>
-                            <th>Username</th>
-                            <th>User ID</th>
+                            <td>@user.Username</td>
+                            <td>@user.UserID</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model.Users)
-                        {
-                            <tr>
-                                <td>@user.Username</td>
-                                <td>@user.UserID</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Create New User Form -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h2 class="section-title">Create New User</h2>
-            </div>
-            <div class="card-body">
-                <form method="post" asp-page-handler="AddUser" class="form-inline">
-                    <div class="form-group mr-2">
-                        <label for="username" class="sr-only">Username:</label>
-                        <input type="text" id="username" asp-for="NewUser.Username" class="form-control" placeholder="Username" />
-                    </div>
-                    <div class="form-group mr-2">
-                        <label for="password" class="sr-only">Password:</label>
-                        <input type="password" id="password" asp-for="NewUser.Password" class="form-control" placeholder="Password" />
-                    </div>
-                    <button type="submit" class="btn btn-success">Create User</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Assigned Users-Doors -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h2 class="section-title">Assigned Users-Doors</h2>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Username</th>
-                            <th>UserID</th>
-                            <th>Door Name</th>
-                            <th>DoorID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var userdoor in Model.UserAssignedDoors)
-                        {
-                            <tr>
-                                <td>@userdoor.User.Username</td>
-                                <td>@userdoor.User.UserID</td>
-                                <td>@userdoor.Door.DoorName</td>
-                                <td>@userdoor.Door.DoorID</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Assignment Section -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h2 class="section-title">Assign or Unassign User to Door</h2>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    <div class="form-group">
-                        <label for="userSelect">Select User:</label>
-                        <select id="userSelect" asp-for="SelectedUserId" asp-items="@(new SelectList(Model.Users, "UserID", "Username"))" class="form-control"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="doorSelect">Select Door:</label>
-                        <select id="doorSelect" asp-for="SelectedDoorId" asp-items="@(new SelectList(Model.UserDoorsList, "DoorID", "DoorName"))" class="form-control"></select>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" asp-page-handler="AssignUserToDoor" class="btn btn-primary">Assign</button>
-                        <button type="submit" asp-page-handler="UnassignUserFromDoor" class="btn btn-warning">Unassign</button>
-                    </div>
-                </form>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Include Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+    <!-- Create New User Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="section-title">Create New User</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-page-handler="AddUser" class="form-inline">
+                <div class="form-group mr-2">
+                    <label for="username" class="sr-only">Username:</label>
+                    <input type="text" id="username" asp-for="NewUser.Username" class="form-control" placeholder="Username" />
+                </div>
+                <div class="form-group mr-2">
+                    <label for="password" class="sr-only">Password:</label>
+                    <input type="password" id="password" asp-for="NewUser.Password" class="form-control" placeholder="Password" />
+                </div>
+                <button type="submit" class="btn btn-success">Create User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assigned Users-Doors -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="section-title">Assigned Users-Doors</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Username</th>
+                        <th>UserID</th>
+                        <th>Door Name</th>
+                        <th>DoorID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var userdoor in Model.UserAssignedDoors)
+                    {
+                        <tr>
+                            <td>@userdoor.User.Username</td>
+                            <td>@userdoor.User.UserID</td>
+                            <td>@userdoor.Door.DoorName</td>
+                            <td>@userdoor.Door.DoorID</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Assignment Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="section-title">Assign or Unassign User to Door</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <label for="userSelect">Select User:</label>
+                    <select id="userSelect" asp-for="SelectedUserId" asp-items="@(new SelectList(Model.Users, "UserID", "Username"))" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="doorSelect">Select Door:</label>
+                    <select id="doorSelect" asp-for="SelectedDoorId" asp-items="@(new SelectList(Model.UserDoorsList, "DoorID", "DoorName"))" class="form-control"></select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" asp-page-handler="AssignUserToDoor" class="btn btn-primary">Assign</button>
+                    <button type="submit" asp-page-handler="UnassignUserFromDoor" class="btn btn-warning">Unassign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
