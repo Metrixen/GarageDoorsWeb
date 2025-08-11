@@ -1,0 +1,13 @@
+.container2 {
+    margin-top: 30px;
+    padding-bottom: 55px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.form-inline .form-control {
+    width: auto;
+}
